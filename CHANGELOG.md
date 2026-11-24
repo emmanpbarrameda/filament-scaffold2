@@ -24,6 +24,10 @@ First release as `emmanpbarrameda/filament-scaffold2`, rebuilt from solution-for
 * The scaffold page no longer runs inside the panel's database transaction.
 * Database notifications go to the current user and are skipped when the app has no notifications table.
 
+### Internal
+* `ScaffoldResource` (~1000 lines) split into focused classes, with no behavior change: `Schemas\ScaffoldForm`, `Actions\GenerateScaffold`, `Generators\{MigrationWriter, ModelWriter, RouteWriter}`, `Database\TableInspector`, `Integrations\{ShieldPolicyGenerator, ApiServiceGenerator}`, `Support\{ScaffoldRules, ScaffoldValidator, Naming, PhpExport, ScaffoldNotifier}`.
+* The old static methods on `ScaffoldResource` remain as `@deprecated` one-line delegators. Remove them before tagging 1.0.0.
+
 ### Added
 * Enum columns: comma-separated values field; enum values are read back from existing MySQL tables.
 * Server-side validation of table, model and column names, column types and index keys before any file is written.
@@ -38,6 +42,7 @@ First release as `emmanpbarrameda/filament-scaffold2`, rebuilt from solution-for
 * "Create Route" without "Create Controller" produced a broken route; the option is now only shown with the controller.
 * `HasPanelShield` (a User-model trait) is no longer added to every generated model.
 * API service lookup finds resources in the nested v4/v5 folders.
+* New resources didn't appear in the sidebar or the Shield Roles page when the panel components were cached (`php artisan optimize` / `filament:cache-components`). Filament only hooks `filament:optimize-clear` into `optimize:clear` in the console, so the scaffold page (a web request) now clears the panel component cache explicitly (`filament:clear-cached-components`).
 * Existing models/policies are not overwritten; existing tables skip the migration with a warning.
 * Removed dependencies on application classes (`App\Traits\HasNavigationConfig`, `App\Filament\Resources\VariableStorerResource`).
 * Removed `composer.json` aliases to classes that don't exist.
