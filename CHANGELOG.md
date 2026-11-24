@@ -2,7 +2,7 @@
 
 All notable changes to `emmanpbarrameda/filament-scaffold2` will be documented in this file.
 
-## 1.0.0 - Unreleased
+## 1.0.0 - 2026-11-25
 
 First release as `emmanpbarrameda/filament-scaffold2`, rebuilt from solution-forest/filament-scaffold for Filament v4/v5.
 
@@ -20,13 +20,13 @@ First release as `emmanpbarrameda/filament-scaffold2`, rebuilt from solution-for
 * Generation order: migration (+ migrate) and model are created before `make:filament-resource --generate`, so the generated form and table read the real columns.
 * Resources use Filament's own v4/v5 layout (Resource + Schemas/ + Tables/ + Pages/); the old regex overwrite of `form()`/`table()` was removed.
 * Table/column introspection uses Laravel's `Schema` builder (works on MySQL, MariaDB, SQLite, PostgreSQL) instead of `SHOW TABLES` / `SHOW COLUMNS`.
-* Cache clearing runs `optimize:clear` in-process (no `proc_open`, no `config:cache`/`route:cache`).
+* Cache clearing runs `optimize:clear` and `filament:clear-cached-components` in-process (no `proc_open`, no `config:cache`/`route:cache`).
 * The scaffold page no longer runs inside the panel's database transaction.
 * Database notifications go to the current user and are skipped when the app has no notifications table.
 
 ### Internal
 * `ScaffoldResource` (~1000 lines) split into focused classes, with no behavior change: `Schemas\ScaffoldForm`, `Actions\GenerateScaffold`, `Generators\{MigrationWriter, ModelWriter, RouteWriter}`, `Database\TableInspector`, `Integrations\{ShieldPolicyGenerator, ApiServiceGenerator}`, `Support\{ScaffoldRules, ScaffoldValidator, Naming, PhpExport, ScaffoldNotifier}`.
-* The old static methods on `ScaffoldResource` remain as `@deprecated` one-line delegators. Remove them before tagging 1.0.0.
+* The static helpers that used to live on `ScaffoldResource` (`generateFiles()`, `buildMigration()`, `getTableColumns()`, `validateData()`, ...) now live only on those classes; `ScaffoldResource` keeps navigation, access, form and pages.
 
 ### Added
 * Enum columns: comma-separated values field; enum values are read back from existing MySQL tables.
