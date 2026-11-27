@@ -49,7 +49,7 @@ class ScaffoldResource extends Resource
         return config('filament-scaffold2.navigation.sort', 99);
     }
 
-    public static function getNavigationLabel(): string|Htmlable
+    public static function getNavigationLabel(): string
     {
         return config('filament-scaffold2.navigation.label', 'Scaffold Manager');
     }

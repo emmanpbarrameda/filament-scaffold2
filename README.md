@@ -18,7 +18,7 @@ Filament Scaffold 2 is a toolkit for **Filament v4 and v5** that simplifies the 
 
 - **Any Database**: table introspection uses Laravel's Schema builder (MySQL, MariaDB, SQLite, PostgreSQL).
 
-- **Safe by Default**: disabled unless you enable it, never overwrites existing models or policies, and rejects names that aren't valid PHP/SQL identifiers before writing anything.
+- **Safe by Default**: on in local development, off in production unless you turn it on, never overwrites existing models or policies, and rejects names that aren't valid PHP/SQL identifiers before writing anything.
 
 - **Optional Integrations**: [Filament Shield](https://github.com/bezhanSalleh/filament-shield) policies and permissions (created by `shield:generate`, so they follow your Shield config) and [Filament API Service](https://github.com/rupadana/filament-api-service) endpoints. These options only show when the packages are installed.
 
@@ -28,10 +28,10 @@ Filament Scaffold 2 is a toolkit for **Filament v4 and v5** that simplifies the 
 - Filament v4 or v5
 
 ## Installation
-Install it as a **dev** dependency. The Scaffold Manager writes PHP files to your project and must never be reachable in production.
+You can install the package via composer:
 
 ```bash
-composer require emmanpbarrameda/filament-scaffold2 --dev
+composer require emmanpbarrameda/filament-scaffold2
 ```
 
 Then, make sure your database connection is set in the `.env` file.
@@ -45,19 +45,23 @@ public function panel(Panel $panel): Panel
 {
     return $panel
         // ...
-        ->plugins(array_filter([
-            class_exists(FilamentScaffoldPlugin::class) ? FilamentScaffoldPlugin::make() : null,
-        ]));
+        ->plugins([
+            FilamentScaffoldPlugin::make(),
+        ]);
 }
 ```
 
-The `class_exists()` check keeps the panel working on servers where dev dependencies are not installed (`composer install --no-dev`).
+That's it. With `APP_ENV=local`, the Scaffold Manager is **on by default**. In any other environment (for example `production`) it is **off** unless you turn it on.
 
-Enable it in your **local** `.env` only:
+To change it, set this in the `.env` of that environment:
 
 ```env
-FILAMENT_SCAFFOLD2_ENABLED=true
+FILAMENT_SCAFFOLD2_ENABLED=true   # force on
+FILAMENT_SCAFFOLD2_ENABLED=false  # force off
 ```
+
+> [!WARNING]
+> The Scaffold Manager writes PHP files and runs migrations. You can enable it on a production server, but it is not recommended. If you do, make sure only trusted users can access it (for example with Filament Shield permissions).
 
 ## Publishing Configuration file
 To publish the configuration file, use:
@@ -68,7 +72,7 @@ php artisan vendor:publish --tag="filament-scaffold2-config"
 
 ```php
 return [
-    'enabled' => env('FILAMENT_SCAFFOLD2_ENABLED', false),
+    'enabled' => env('FILAMENT_SCAFFOLD2_ENABLED', env('APP_ENV', 'production') === 'local'),
 
     'navigation' => [
         'group' => 'System',
@@ -79,7 +83,7 @@ return [
 ];
 ```
 
-Set `enabled` to `false` (the default) to turn the Scaffold Manager off. When it is off, the page is not registered at all.
+`enabled` defaults to `true` when `APP_ENV=local` and `false` everywhere else. When it is off, the page is not registered at all.
 
 ## Usage
 Your panel will have a **System > Scaffold2 Manager** page.
@@ -117,7 +121,7 @@ Issues and pull requests are welcome on [GitHub](https://github.com/emmanpbarram
 
 ## Security Vulnerabilities
 
-The Scaffold Manager turns form input into PHP files. Keep it disabled outside local development. If you find a security issue, please [open a private security advisory](../../security/advisories/new) instead of a public issue.
+The Scaffold Manager turns form input into PHP files. It is off outside local development by default; keep it that way unless you have a reason to enable it. If you find a security issue, please [open a private security advisory](../../security/advisories/new) instead of a public issue.
 
 ## Credits
 

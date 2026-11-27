@@ -8,13 +8,15 @@ return [
     |--------------------------------------------------------------------------
     |
     | The Scaffold Manager writes PHP files (models, migrations, resources,
-    | policies, routes) to disk from user input. Keep it OFF everywhere except
-    | your local machine. Turn it on with FILAMENT_SCAFFOLD2_ENABLED=true in
-    | your local .env only.
+    | policies, routes) to disk from user input.
+    |
+    | Default: ON when APP_ENV=local, OFF in every other environment.
+    | Set FILAMENT_SCAFFOLD2_ENABLED=true or false in .env to override it.
+    | Enabling it on a production server is possible but not recommended.
     |
     */
 
-    'enabled' => env('FILAMENT_SCAFFOLD2_ENABLED', false),
+    'enabled' => env('FILAMENT_SCAFFOLD2_ENABLED', env('APP_ENV', 'production') === 'local'),
 
     /*
     |--------------------------------------------------------------------------

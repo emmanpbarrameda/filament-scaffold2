@@ -2,6 +2,15 @@
 
 All notable changes to `emmanpbarrameda/filament-scaffold2` will be documented in this file.
 
+## 1.0.1 - 2026-11-27
+
+### Fixed
+* Fatal error on Filament v4 versions where `Resource::getNavigationLabel()` returns `string` ("Declaration of ScaffoldResource::getNavigationLabel(): Htmlable|string must be compatible"). The override now returns `string`, which is compatible with every v4 and v5 release.
+
+### Changed
+* `enabled` now defaults to ON when `APP_ENV=local` and OFF in every other environment. `FILAMENT_SCAFFOLD2_ENABLED=true|false` still overrides it anywhere. If you published the config before 1.0.1, update its `enabled` line to get the new default.
+* README: install as a regular dependency with `FilamentScaffoldPlugin::make()`.
+
 ## 1.0.0 - 2026-11-25
 
 First release as `emmanpbarrameda/filament-scaffold2`, rebuilt from solution-forest/filament-scaffold for Filament v4/v5.
