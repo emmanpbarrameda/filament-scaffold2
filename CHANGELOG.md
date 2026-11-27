@@ -2,6 +2,14 @@
 
 All notable changes to `emmanpbarrameda/filament-scaffold2` will be documented in this file.
 
+## 1.0.2 - 2026-11-28
+
+### Fixed
+* Shield permissions had no effect on the Scaffold Manager page: the package's `Scaffold` model had no policy, and Laravel's auto-discovery never looks in `App\Policies` for a package model, so Filament allowed every user. The package now registers `App\Policies\ScaffoldPolicy` (configurable via `filament-scaffold2.policy`) when the class exists and the app hasn't registered its own.
+
+### Docs
+* README: generate the policy with `shield:generate --resource=ScaffoldResource`.
+
 ## 1.0.1 - 2026-11-27
 
 ### Fixed

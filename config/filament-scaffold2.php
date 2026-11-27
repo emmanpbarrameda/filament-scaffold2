@@ -20,6 +20,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Policy for the Scaffold Manager page
+    |--------------------------------------------------------------------------
+    |
+    | Registered for the package's Scaffold model when the class exists, so
+    | role permissions (e.g. Filament Shield) control who can open the page.
+    | Generate it with: php artisan shield:generate --resource=ScaffoldResource
+    | Set to null to skip it.
+    |
+    */
+
+    'policy' => 'App\\Policies\\ScaffoldPolicy',
+
+    /*
+    |--------------------------------------------------------------------------
     | Navigation
     |--------------------------------------------------------------------------
     */

@@ -63,6 +63,15 @@ FILAMENT_SCAFFOLD2_ENABLED=false  # force off
 > [!WARNING]
 > The Scaffold Manager writes PHP files and runs migrations. You can enable it on a production server, but it is not recommended. If you do, make sure only trusted users can access it (for example with Filament Shield permissions).
 
+### Permissions (Filament Shield)
+If you use [Filament Shield](https://github.com/bezhanSalleh/filament-shield), generate the policy and permissions for the Scaffold Manager page:
+
+```bash
+php artisan shield:generate --resource=ScaffoldResource --panel=admin --option=policies_and_permissions
+```
+
+The package registers `App\Policies\ScaffoldPolicy` for its own model automatically, so the Scaffold permissions in **Roles** decide who can open the page. Without a policy, every panel user who can see the panel can open it.
+
 ## Publishing Configuration file
 To publish the configuration file, use:
 
@@ -80,10 +89,14 @@ return [
         'sort' => 99,
         'label' => 'Scaffold2 Manager',
     ],
+
+    'policy' => 'App\\Policies\\ScaffoldPolicy',
 ];
 ```
 
 `enabled` defaults to `true` when `APP_ENV=local` and `false` everywhere else. When it is off, the page is not registered at all.
+
+`policy` is the policy class registered for the Scaffold Manager page (see [Permissions](#permissions-filament-shield)). It is only registered when the class exists and your app hasn't registered one itself. Set it to `null` to skip it.
 
 ## Usage
 Your panel will have a **System > Scaffold2 Manager** page.
